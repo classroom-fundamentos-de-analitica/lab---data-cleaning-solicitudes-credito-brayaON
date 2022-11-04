@@ -15,8 +15,8 @@ def clean_data():
     df = pd.read_csv("solicitudes_credito.csv", sep=";", index_col=0, encoding='utf-8')
     df = df.dropna()
 
-    pd.set_option('display.max_rows', 500)
-    print(df.barrio.value_counts())
+    # pd.set_option('display.max_rows', 500)
+    # print(df.barrio.value_counts())
     df.comuna_ciudadano = df.comuna_ciudadano.astype('string').replace('.0$', '', regex=True)
 
     # Limpieza de la columna sexo
@@ -26,7 +26,7 @@ def clean_data():
     df.tipo_de_emprendimiento = df.tipo_de_emprendimiento.str.lower()
 
     df.barrio = df.barrio.str.lower()
-    df.barrio = df.barrio.str.replace('[ |_]', '-', regex=True).replace('\-$', '', regex=True).replace('\.','', regex=True)
+    df.barrio = df.barrio.str.replace('[ |-]', '_', regex=True).replace('\.','', regex=True)
 
     # Limpieza idea de negocio
     df.idea_negocio = df.idea_negocio.map(lambda x : x.strip())
@@ -59,12 +59,9 @@ def clean_data():
     df.línea_credito = df.línea_credito.str.replace('[_| |-]$', '', regex=True)
     # print(df.línea_credito.value_counts())
 
-    # df = df.drop_duplicates()
     # Elimina los repetidos en todas sus columnas
     df = df.drop_duplicates()
 
-    df.barrio.to_csv('out.csv', index=False)
-    print(df.barrio.value_counts())
     return df
 
 clean_data()
